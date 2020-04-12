@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+    component: postgres
+  name: postgres
+  namespace: postgres-app
+spec:
+  selector:
+    matchLabels:
+      app: db
+      component: postgres
+  template:
+    metadata:
+      labels:
+        app: db
+        component: postgres
+    spec:
+      volumes:
+        - name: postgres-configure
+          configMap:
+            name: postgres-config  
+      containers:
+      - env:
+          - name: POSTGRES_DB
+            value: "demo"
+          - name: POSTGRES_USER
+            value: "admin"
+          - name: POSTGRES_PASSWORD
+            value: "admin"
+        image: postgres
+        imagePullPolicy: IfNotPresent
+        name: postgres
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi
+        volumeMounts:
+        - name: postgres-configure
+          mountPath: /docker-entrypoint-initdb.d/

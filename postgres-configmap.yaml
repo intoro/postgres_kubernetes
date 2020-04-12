@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: postgres-app
+data:
+  initdb.sql: |
+    CREATE SCHEMA admin;
+    SET SCHEMA 'admin';
+
+    CREATE TABLE IF NOT EXISTS CARD(
+      ID SERIAL PRIMARY KEY,
+      NAME VARCHAR(32) UNIQUE NOT NULL CHECK(NAME <> ''),
+      IMAGE_LOC VARCHAR(322),
+      URL VARCHAR(255) NOT NULL CHECK(URL <> ''),
+      SUMMARY VARCHAR(255),
+      DESCRIPTION VARCHAR(280)
+    );
+
+    INSERT INTO CARD (NAME, IMAGE_LOC, URL, SUMMARY, DESCRIPTION) VALUES ('demo card','https://images.pexels.com/photos/1040161/pexels-photo-1040161.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260','http://google.com','Happy Easter', '2020');
+
+
+
